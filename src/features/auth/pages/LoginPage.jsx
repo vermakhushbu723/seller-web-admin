@@ -4,10 +4,12 @@ import { MdEmail, MdLock, MdLogin, MdVisibility, MdVisibilityOff } from 'react-i
 import { AppColors } from '../../../core/constants/colors.js';
 import { AppDimensions } from '../../../core/constants/dimensions.js';
 import { useAuth } from '../../../core/context/AuthContext.jsx';
+import { useResponsive } from '../../../core/utils/useResponsive.js';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { isMobile, isTablet, padding } = useResponsive();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -39,27 +41,27 @@ const LoginPage = () => {
         alignItems: 'center',
         justifyContent: 'center',
         background: `linear-gradient(135deg, ${AppColors.primary} 0%, ${AppColors.primaryLight} 50%, ${AppColors.secondary} 100%)`,
-        padding: '2rem',
+        padding: isMobile ? '1rem' : '1.5rem',
       }}
     >
       {/* Login Card */}
       <div
         style={{
           width: '100%',
-          maxWidth: '440px',
+          maxWidth: '400px',
           background: AppColors.surface,
-          borderRadius: AppDimensions.radiusXL,
-          padding: AppDimensions.paddingXXL,
+          borderRadius: isMobile ? AppDimensions.radiusL : AppDimensions.radiusXL,
+          padding: isMobile ? '1rem' : isTablet ? '1.5rem' : '1.75rem',
           boxShadow: AppDimensions.elevationXL,
         }}
       >
         {/* Logo & Title */}
-        <div style={{ textAlign: 'center', marginBottom: AppDimensions.marginXL }}>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? '0.75rem' : '1rem' }}>
           <div
             style={{
-              width: '80px',
-              height: '80px',
-              margin: '0 auto 1.5rem',
+              width: isMobile ? '48px' : '56px',
+              height: isMobile ? '48px' : '56px',
+              margin: isMobile ? '0 auto 0.5rem' : '0 auto 0.75rem',
               background: `linear-gradient(135deg, ${AppColors.primary} 0%, ${AppColors.primaryLight} 100%)`,
               borderRadius: '50%',
               display: 'flex',
@@ -68,21 +70,21 @@ const LoginPage = () => {
               color: 'white',
             }}
           >
-            <MdLogin size={40} />
+            <MdLogin size={isMobile ? 24 : 28} />
           </div>
           <h1
             style={{
-              fontSize: '2rem',
+              fontSize: isMobile ? '1.125rem' : isTablet ? '1.25rem' : '1.5rem',
               fontWeight: 700,
               background: `linear-gradient(135deg, ${AppColors.primary} 0%, ${AppColors.primaryLight} 100%)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              marginBottom: '0.5rem',
+              marginBottom: '0.25rem',
             }}
           >
             Seller Admin Panel
           </h1>
-          <p style={{ color: AppColors.textSecondary, fontSize: '1rem' }}>
+          <p style={{ color: AppColors.textSecondary, fontSize: isMobile ? '0.75rem' : '0.813rem' }}>
             Sign in to manage your business
           </p>
         </div>
@@ -90,12 +92,12 @@ const LoginPage = () => {
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
           {/* Email Input */}
-          <div style={{ marginBottom: AppDimensions.marginL }}>
+          <div style={{ marginBottom: isMobile ? '0.75rem' : '0.875rem' }}>
             <label
               style={{
                 display: 'block',
-                marginBottom: AppDimensions.marginS,
-                fontSize: '0.875rem',
+                marginBottom: '0.25rem',
+                fontSize: '0.813rem',
                 fontWeight: 600,
                 color: AppColors.textPrimary,
               }}
@@ -125,10 +127,10 @@ const LoginPage = () => {
                 required
                 style={{
                   width: '100%',
-                  padding: '0.875rem 1rem 0.875rem 3rem',
+                  padding: isMobile ? '0.625rem 0.75rem 0.625rem 2.5rem' : '0.688rem 0.875rem 0.688rem 2.75rem',
                   border: `2px solid ${AppColors.border}`,
                   borderRadius: AppDimensions.radiusM,
-                  fontSize: '1rem',
+                  fontSize: isMobile ? '0.875rem' : '0.938rem',
                   outline: 'none',
                   transition: 'all 200ms',
                 }}
@@ -145,12 +147,12 @@ const LoginPage = () => {
           </div>
 
           {/* Password Input */}
-          <div style={{ marginBottom: AppDimensions.marginL }}>
+          <div style={{ marginBottom: isMobile ? '0.75rem' : '0.875rem' }}>
             <label
               style={{
                 display: 'block',
-                marginBottom: AppDimensions.marginS,
-                fontSize: '0.875rem',
+                marginBottom: '0.25rem',
+                fontSize: '0.813rem',
                 fontWeight: 600,
                 color: AppColors.textPrimary,
               }}
@@ -180,10 +182,10 @@ const LoginPage = () => {
                 required
                 style={{
                   width: '100%',
-                  padding: '0.875rem 3rem 0.875rem 3rem',
+                  padding: isMobile ? '0.625rem 2.5rem' : '0.688rem 2.75rem',
                   border: `2px solid ${AppColors.border}`,
                   borderRadius: AppDimensions.radiusM,
-                  fontSize: '1rem',
+                  fontSize: isMobile ? '0.875rem' : '0.938rem',
                   outline: 'none',
                   transition: 'all 200ms',
                 }}
@@ -220,13 +222,13 @@ const LoginPage = () => {
           {error && (
             <div
               style={{
-                padding: '0.875rem',
-                marginBottom: AppDimensions.marginL,
+                padding: isMobile ? '0.625rem' : '0.688rem',
+                marginBottom: isMobile ? '0.75rem' : '0.875rem',
                 background: `${AppColors.error}15`,
                 border: `1px solid ${AppColors.error}`,
                 borderRadius: AppDimensions.radiusM,
                 color: AppColors.error,
-                fontSize: '0.875rem',
+                fontSize: '0.813rem',
               }}
             >
               {error}
@@ -236,12 +238,12 @@ const LoginPage = () => {
           {/* Demo Credentials Info */}
           <div
             style={{
-              padding: '0.875rem',
-              marginBottom: AppDimensions.marginL,
+              padding: isMobile ? '0.625rem' : '0.688rem',
+              marginBottom: isMobile ? '0.75rem' : '0.875rem',
               background: `${AppColors.info}15`,
               border: `1px solid ${AppColors.info}`,
               borderRadius: AppDimensions.radiusM,
-              fontSize: '0.875rem',
+              fontSize: '0.813rem',
             }}
           >
             <strong style={{ color: AppColors.info }}>Demo Credentials:</strong>
@@ -258,14 +260,14 @@ const LoginPage = () => {
             disabled={loading}
             style={{
               width: '100%',
-              padding: '1rem',
+              padding: isMobile ? '0.688rem' : '0.75rem',
               background: loading
                 ? AppColors.grey400
                 : `linear-gradient(135deg, ${AppColors.primary} 0%, ${AppColors.primaryLight} 100%)`,
               color: 'white',
               border: 'none',
               borderRadius: AppDimensions.radiusM,
-              fontSize: '1rem',
+              fontSize: isMobile ? '0.875rem' : '0.938rem',
               fontWeight: 600,
               cursor: loading ? 'not-allowed' : 'pointer',
               transition: 'all 200ms',
@@ -291,11 +293,11 @@ const LoginPage = () => {
         {/* Footer */}
         <div
           style={{
-            marginTop: AppDimensions.marginXL,
-            paddingTop: AppDimensions.paddingL,
+            marginTop: isMobile ? '1rem' : '1.25rem',
+            paddingTop: isMobile ? '0.75rem' : '0.875rem',
             borderTop: `1px solid ${AppColors.divider}`,
             textAlign: 'center',
-            fontSize: '0.875rem',
+            fontSize: '0.75rem',
             color: AppColors.textSecondary,
           }}
         >

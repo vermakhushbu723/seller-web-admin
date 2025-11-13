@@ -1,28 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdNotifications, MdPerson, MdLogout, MdMenu } from 'react-icons/md';
 import { AppColors } from '../../core/constants/colors.js';
 import { AppDimensions } from '../../core/constants/dimensions.js';
 import { useAuth } from '../../core/context/AuthContext.jsx';
+import { useResponsive } from '../../core/utils/useResponsive.js';
 
 const Header = ({ onMenuClick }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { isMobile, isTablet, padding } = useResponsive();
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
+
+  const showFullProfile = !isMobile && !isTablet;
 
   return (
     <header
@@ -33,15 +27,16 @@ const Header = ({ onMenuClick }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: isMobile ? `0 ${AppDimensions.paddingM}` : `0 ${AppDimensions.paddingXL}`,
+        padding: `0 ${padding}`,
         position: 'sticky',
         top: 0,
         zIndex: 50,
+        flexShrink: 0,
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: AppDimensions.spacingL }}>
-        {/* Mobile Menu Button */}
-        {isMobile && (
+      <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? AppDimensions.spacingM : AppDimensions.spacingL }}>
+        {/* Mobile/Tablet Menu Button */}
+        {(isMobile || isTablet) && (
           <button
             onClick={onMenuClick}
             style={{
@@ -60,18 +55,26 @@ const Header = ({ onMenuClick }) => {
         <h2
           style={{
             margin: 0,
-            fontSize: isMobile ? '1rem' : '1.25rem',
+            fontSize: isMobile ? '0.875rem' : isTablet ? '1rem' : '1.25rem',
             fontWeight: 600,
             color: AppColors.textPrimary,
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
-          Welcome Back! 👋
+          {isMobile ? 'Dashboard' : 'Welcome Back! 👋'}
         </h2>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? AppDimensions.spacingS : AppDimensions.spacingL }}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: isMobile ? AppDimensions.spacingS : AppDimensions.spacingM,
+      }}>
         {/* Notifications Icon */}
         <button
+          onClick={() => navigate('/notifications')}
           style={{
             background: 'transparent',
             border: 'none',
@@ -81,6 +84,14 @@ const Header = ({ onMenuClick }) => {
             display: 'flex',
             alignItems: 'center',
             color: AppColors.textSecondary,
+            borderRadius: '50%',
+            transition: 'background 200ms',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = AppColors.surfaceVariant;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent';
           }}
         >
           <MdNotifications size={isMobile ? 20 : 24} />
@@ -97,9 +108,10 @@ const Header = ({ onMenuClick }) => {
           />
         </button>
 
-        {/* Profile - Hide text on mobile */}
-        {!isMobile && (
+        {/* Profile - Show full on desktop, icon only on mobile/tablet */}
+        {showFullProfile ? (
           <div
+            onClick={() => navigate('/profile')}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -107,6 +119,14 @@ const Header = ({ onMenuClick }) => {
               padding: `${AppDimensions.paddingS} ${AppDimensions.paddingM}`,
               background: AppColors.surfaceVariant,
               borderRadius: AppDimensions.radiusFull,
+              cursor: 'pointer',
+              transition: 'all 200ms',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = AppColors.grey200;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = AppColors.surfaceVariant;
             }}
           >
             <div
@@ -132,6 +152,30 @@ const Header = ({ onMenuClick }) => {
               </span>
             </div>
           </div>
+        ) : (
+          <button
+            onClick={() => navigate('/profile')}
+            style={{
+              background: `linear-gradient(135deg, ${AppColors.primary} 0%, ${AppColors.primaryLight} 100%)`,
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              transition: 'transform 200ms',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
+          >
+            <MdPerson size={20} />
+          </button>
         )}
 
         {/* Logout Button */}
@@ -141,8 +185,8 @@ const Header = ({ onMenuClick }) => {
             background: `linear-gradient(135deg, ${AppColors.error} 0%, ${AppColors.errorDark} 100%)`,
             color: 'white',
             border: 'none',
-            borderRadius: AppDimensions.radiusM,
-            padding: isMobile ? `${AppDimensions.paddingS}` : `${AppDimensions.paddingS} ${AppDimensions.paddingM}`,
+            borderRadius: isMobile ? '50%' : AppDimensions.radiusM,
+            padding: isMobile ? '0.625rem' : `${AppDimensions.paddingS} ${AppDimensions.paddingM}`,
             display: 'flex',
             alignItems: 'center',
             gap: isMobile ? 0 : AppDimensions.spacingS,
@@ -150,6 +194,7 @@ const Header = ({ onMenuClick }) => {
             fontSize: '0.875rem',
             fontWeight: 600,
             transition: 'all 200ms',
+            whiteSpace: 'nowrap',
           }}
           onMouseEnter={(e) => {
             e.target.style.transform = 'translateY(-2px)';

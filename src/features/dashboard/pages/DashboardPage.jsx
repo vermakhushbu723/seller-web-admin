@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MdPerson,
@@ -13,19 +13,11 @@ import {
 import { AppColors } from '../../../core/constants/colors.js';
 import { AppDimensions } from '../../../core/constants/dimensions.js';
 import { AppRoutes } from '../../../core/constants/routes.js';
+import { useResponsive } from '../../../core/utils/useResponsive.js';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  const { isMobile, isTablet, gridColumns, gap, padding } = useResponsive();
 
   const quickActions = [
     {
@@ -65,23 +57,37 @@ const DashboardPage = () => {
     { icon: MdTrendingUp, label: 'Growth', value: '+12%', color: AppColors.warning },
   ];
 
+  // Calculate responsive grid columns for quick actions
+  const getQuickActionColumns = () => {
+    if (isMobile) return 2;
+    if (isTablet) return 2;
+    return 4;
+  };
+
+  // Calculate responsive grid columns for stats
+  const getStatsColumns = () => {
+    if (isMobile) return 2;
+    if (isTablet) return 2;
+    return 4;
+  };
+
   return (
-    <div>
+    <div style={{ maxWidth: '100%', width: '100%' }}>
       {/* Welcome Card */}
       <div
         style={{
           width: '100%',
-          padding: isMobile ? AppDimensions.paddingL : AppDimensions.paddingXL,
+          padding: isMobile ? AppDimensions.paddingL : isTablet ? AppDimensions.paddingXL : '2rem',
           background: `linear-gradient(135deg, ${AppColors.primary} 0%, ${AppColors.primaryLight} 100%)`,
           borderRadius: AppDimensions.radiusL,
           boxShadow: `0 5px 15px ${AppColors.primary}40`,
-          marginBottom: AppDimensions.marginXL,
+          marginBottom: isMobile ? AppDimensions.marginL : AppDimensions.marginXL,
         }}
       >
         <h2
           style={{
             color: 'white',
-            fontSize: isMobile ? '1.5rem' : '2rem',
+            fontSize: isMobile ? '1.25rem' : isTablet ? '1.5rem' : '2rem',
             fontWeight: 700,
             margin: '0 0 0.5rem 0',
           }}
@@ -91,7 +97,7 @@ const DashboardPage = () => {
         <p
           style={{
             color: 'rgba(255, 255, 255, 0.9)',
-            fontSize: isMobile ? '0.875rem' : '1rem',
+            fontSize: isMobile ? '0.813rem' : isTablet ? '0.938rem' : '1rem',
             margin: 0,
           }}
         >
@@ -102,7 +108,7 @@ const DashboardPage = () => {
       {/* Quick Actions Section */}
       <h3
         style={{
-          fontSize: isMobile ? '1.25rem' : '1.5rem',
+          fontSize: isMobile ? '1.125rem' : isTablet ? '1.25rem' : '1.5rem',
           fontWeight: 700,
           color: AppColors.textPrimary,
           marginBottom: AppDimensions.marginM,
@@ -114,9 +120,9 @@ const DashboardPage = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)',
-          gap: AppDimensions.marginM,
-          marginBottom: AppDimensions.marginXXL,
+          gridTemplateColumns: `repeat(${getQuickActionColumns()}, 1fr)`,
+          gap: gap,
+          marginBottom: isMobile ? AppDimensions.marginXL : AppDimensions.marginXXL,
         }}
       >
         {quickActions.map((action, index) => {
@@ -126,7 +132,7 @@ const DashboardPage = () => {
               key={index}
               onClick={() => navigate(action.route)}
               style={{
-                padding: isMobile ? AppDimensions.paddingM : AppDimensions.paddingL,
+                padding: isMobile ? AppDimensions.paddingM : isTablet ? AppDimensions.paddingL : AppDimensions.paddingXL,
                 background: AppColors.surface,
                 borderRadius: AppDimensions.radiusM,
                 border: `1px solid ${action.color}40`,
@@ -146,8 +152,8 @@ const DashboardPage = () => {
             >
               <div
                 style={{
-                  width: isMobile ? '40px' : '48px',
-                  height: isMobile ? '40px' : '48px',
+                  width: isMobile ? '36px' : isTablet ? '44px' : '48px',
+                  height: isMobile ? '36px' : isTablet ? '44px' : '48px',
                   margin: '0 auto 0.5rem',
                   background: `${action.color}15`,
                   borderRadius: '50%',
@@ -156,11 +162,11 @@ const DashboardPage = () => {
                   justifyContent: 'center',
                 }}
               >
-                <IconComponent size={isMobile ? 20 : 24} style={{ color: action.color }} />
+                <IconComponent size={isMobile ? 18 : isTablet ? 22 : 24} style={{ color: action.color }} />
               </div>
               <h4
                 style={{
-                  fontSize: isMobile ? '0.813rem' : '0.938rem',
+                  fontSize: isMobile ? '0.75rem' : isTablet ? '0.875rem' : '0.938rem',
                   fontWeight: 700,
                   color: AppColors.textPrimary,
                   margin: '0 0 0.25rem 0',
@@ -170,7 +176,7 @@ const DashboardPage = () => {
               </h4>
               <p
                 style={{
-                  fontSize: isMobile ? '0.688rem' : '0.75rem',
+                  fontSize: isMobile ? '0.625rem' : isTablet ? '0.688rem' : '0.75rem',
                   color: AppColors.textSecondary,
                   margin: 0,
                 }}
@@ -185,7 +191,7 @@ const DashboardPage = () => {
       {/* Overview Section */}
       <h3
         style={{
-          fontSize: isMobile ? '1.25rem' : '1.5rem',
+          fontSize: isMobile ? '1.125rem' : isTablet ? '1.25rem' : '1.5rem',
           fontWeight: 700,
           color: AppColors.textPrimary,
           marginBottom: AppDimensions.marginM,
@@ -197,8 +203,8 @@ const DashboardPage = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)',
-          gap: AppDimensions.marginM,
+          gridTemplateColumns: `repeat(${getStatsColumns()}, 1fr)`,
+          gap: gap,
         }}
       >
         {stats.map((stat, index) => {
@@ -207,7 +213,7 @@ const DashboardPage = () => {
             <div
               key={index}
               style={{
-                padding: isMobile ? AppDimensions.paddingM : AppDimensions.paddingL,
+                padding: isMobile ? AppDimensions.paddingM : isTablet ? AppDimensions.paddingL : AppDimensions.paddingXL,
                 background: AppColors.surface,
                 borderRadius: AppDimensions.radiusM,
                 boxShadow: `0 2px 8px ${AppColors.grey300}80`,
@@ -224,12 +230,12 @@ const DashboardPage = () => {
               }}
             >
               <IconComponent
-                size={isMobile ? 24 : 28}
+                size={isMobile ? 22 : isTablet ? 26 : 28}
                 style={{ color: stat.color, marginBottom: '0.5rem' }}
               />
               <h2
                 style={{
-                  fontSize: isMobile ? '1.5rem' : '1.75rem',
+                  fontSize: isMobile ? '1.25rem' : isTablet ? '1.5rem' : '1.75rem',
                   fontWeight: 700,
                   color: stat.color,
                   margin: '0 0 0.25rem 0',
@@ -239,7 +245,7 @@ const DashboardPage = () => {
               </h2>
               <p
                 style={{
-                  fontSize: isMobile ? '0.75rem' : '0.813rem',
+                  fontSize: isMobile ? '0.688rem' : isTablet ? '0.75rem' : '0.813rem',
                   color: AppColors.textSecondary,
                   margin: 0,
                 }}

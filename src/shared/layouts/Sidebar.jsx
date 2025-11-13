@@ -18,25 +18,16 @@ import {
 import { AppColors } from '../../core/constants/colors.js';
 import { AppDimensions } from '../../core/constants/dimensions.js';
 import { AppRoutes } from '../../core/constants/routes.js';
+import { useResponsive } from '../../core/utils/useResponsive.js';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile, isTablet } = useResponsive();
 
-  // Check if mobile screen
+  // Close sidebar on route change for mobile/tablet
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Close sidebar on route change for mobile
-  useEffect(() => {
-    if (isMobile && isOpen) {
+    if ((isMobile || isTablet) && isOpen) {
       onClose();
     }
   }, [location.pathname]);
@@ -57,15 +48,30 @@ const Sidebar = ({ isOpen, onClose }) => {
   const isActive = (path) => location.pathname === path;
 
   const handleMenuItemClick = () => {
-    if (isMobile) {
+    if (isMobile || isTablet) {
       onClose();
     }
   };
 
+  // Determine sidebar width
+  const getSidebarWidth = () => {
+    if (isMobile || isTablet) return '280px';
+    if (collapsed) return AppDimensions.sidebarCollapsedWidth;
+    return AppDimensions.sidebarWidth;
+  };
+
+  // Determine sidebar left position
+  const getSidebarLeft = () => {
+    if (isMobile || isTablet) {
+      return isOpen ? 0 : '-280px';
+    }
+    return 0;
+  };
+
   return (
     <>
-      {/* Mobile Overlay */}
-      {isMobile && isOpen && (
+      {/* Mobile/Tablet Overlay */}
+      {(isMobile || isTablet) && isOpen && (
         <div
           onClick={onClose}
           style={{
@@ -84,22 +90,20 @@ const Sidebar = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <div
         style={{
-          width: isMobile 
-            ? '280px' 
-            : collapsed 
-              ? AppDimensions.sidebarCollapsedWidth 
-              : AppDimensions.sidebarWidth,
+          width: getSidebarWidth(),
           height: '100vh',
           background: AppColors.surface,
           borderRight: `1px solid ${AppColors.divider}`,
           position: 'fixed',
-          left: isMobile ? (isOpen ? 0 : '-280px') : 0,
+          left: getSidebarLeft(),
           top: 0,
           transition: 'all 300ms ease-in-out',
           display: 'flex',
           flexDirection: 'column',
           zIndex: 100,
-          boxShadow: isMobile && isOpen ? '4px 0 8px rgba(0, 0, 0, 0.1)' : 'none',
+          boxShadow: (isMobile || isTablet) && isOpen ? '4px 0 8px rgba(0, 0, 0, 0.1)' : 'none',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
         {/* Logo Section */}
@@ -111,23 +115,25 @@ const Sidebar = ({ isOpen, onClose }) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             height: AppDimensions.headerHeight,
+            flexShrink: 0,
           }}
         >
-          {(!collapsed || isMobile) && (
+          {(!collapsed || isMobile || isTablet) && (
             <h1
               style={{
-                fontSize: '1.5rem',
+                fontSize: isMobile ? '1.25rem' : '1.5rem',
                 fontWeight: 700,
                 background: `linear-gradient(135deg, ${AppColors.primary} 0%, ${AppColors.primaryLight} 100%)`,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 margin: 0,
+                whiteSpace: 'nowrap',
               }}
             >
               Seller Admin
             </h1>
           )}
-          {isMobile ? (
+          {(isMobile || isTablet) ? (
             <button
               onClick={onClose}
               style={{
@@ -163,7 +169,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         {/* Menu Items */}
-        <nav style={{ flex: 1, overflowY: 'auto', padding: AppDimensions.paddingS }}>
+        <nav style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', padding: AppDimensions.paddingS }}>
           {menuItems.map((item) => {
             const IconComponent = item.icon;
             return (
@@ -184,6 +190,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                   fontWeight: isActive(item.path) ? 600 : 400,
                   transition: 'all 200ms ease-in-out',
                   cursor: 'pointer',
+                  fontSize: isMobile ? '0.875rem' : '1rem',
+                  whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive(item.path)) {
@@ -196,8 +204,8 @@ const Sidebar = ({ isOpen, onClose }) => {
                   }
                 }}
               >
-                <IconComponent size={24} />
-                {(!collapsed || isMobile) && <span>{item.label}</span>}
+                <IconComponent size={isMobile ? 20 : 24} />
+                {(!collapsed || isMobile || isTablet) && <span>{item.label}</span>}
               </Link>
             );
           })}

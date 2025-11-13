@@ -75,4 +75,45 @@ export const AppDimensions = {
 
   // Header
   headerHeight: '64px',
+
+  // Responsive Breakpoints (in pixels)
+  breakpoints: {
+    mobile: 480,
+    tablet: 768,
+    laptop: 1024,
+    desktop: 1280,
+    wide: 1536,
+  },
+
+  // Responsive Grid Columns
+  gridColumns: {
+    mobile: 1,
+    tablet: 2,
+    laptop: 3,
+    desktop: 4,
+  },
+
+  // Responsive Spacing
+  responsivePadding: {
+    mobile: '12px',
+    tablet: '16px',
+    laptop: '24px',
+    desktop: '32px',
+  },
+
+  responsiveGap: {
+    mobile: '12px',
+    tablet: '16px',
+    laptop: '20px',
+    desktop: '24px',
+  },
+};
+
+// Helper function to get responsive value
+export const getResponsiveValue = (values, width) => {
+  if (width < AppDimensions.breakpoints.mobile) return values.mobile;
+  if (width < AppDimensions.breakpoints.tablet) return values.tablet || values.mobile;
+  if (width < AppDimensions.breakpoints.laptop) return values.laptop || values.tablet || values.mobile;
+  if (width < AppDimensions.breakpoints.desktop) return values.desktop || values.laptop || values.tablet || values.mobile;
+  return values.wide || values.desktop || values.laptop || values.tablet || values.mobile;
 };
