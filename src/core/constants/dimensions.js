@@ -33,34 +33,34 @@ export const AppDimensions = {
   radiusXXL: '24px',
   radiusFull: '9999px',
 
-  // Card
-  cardRadius: '12px',
-  cardPadding: '16px',
-  cardElevation: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+  // Card - Compact Admin Panel Sizes
+  cardRadius: '8px',
+  cardPadding: '12px',
+  cardElevation: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
 
-  // Elevation
+  // Elevation - Subtle Shadows
   elevationNone: '0',
-  elevationS: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-  elevationM: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-  elevationL: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-  elevationXL: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+  elevationS: '0 1px 2px 0 rgba(0, 0, 0, 0.04)',
+  elevationM: '0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+  elevationL: '0 4px 6px -1px rgba(0, 0, 0, 0.08)',
+  elevationXL: '0 8px 12px -2px rgba(0, 0, 0, 0.1)',
 
-  // Icon Sizes
-  iconXS: '16px',
-  iconS: '20px',
-  iconM: '24px',
-  iconL: '32px',
-  iconXL: '48px',
+  // Icon Sizes - Compact
+  iconXS: '14px',
+  iconS: '16px',
+  iconM: '20px',
+  iconL: '24px',
+  iconXL: '32px',
 
-  // Button Heights
-  buttonSmall: '32px',
-  buttonMedium: '40px',
-  buttonLarge: '48px',
+  // Button Heights - Compact
+  buttonSmall: '28px',
+  buttonMedium: '32px',
+  buttonLarge: '36px',
 
-  // Input Heights
-  inputSmall: '36px',
-  inputMedium: '44px',
-  inputLarge: '52px',
+  // Input Heights - Compact
+  inputSmall: '32px',
+  inputMedium: '36px',
+  inputLarge: '40px',
 
   // Container Width
   containerSmall: '640px',
@@ -69,12 +69,12 @@ export const AppDimensions = {
   containerXLarge: '1280px',
   containerXXLarge: '1536px',
 
-  // Sidebar
-  sidebarWidth: '280px',
-  sidebarCollapsedWidth: '80px',
+  // Sidebar - Compact
+  sidebarWidth: '260px',
+  sidebarCollapsedWidth: '60px',
 
-  // Header
-  headerHeight: '64px',
+  // Header - Compact
+  headerHeight: '56px',
 
   // Responsive Breakpoints (in pixels)
   breakpoints: {

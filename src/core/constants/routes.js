@@ -10,17 +10,29 @@ export const AppRoutes = {
   dashboard: '/',
   analytics: '/analytics',
 
+  // Vendor Routes
+  vendors: '/vendors',
+  addVendor: '/vendors/add',
+  editVendor: '/vendors/edit/:id',
+  vendorDetails: '/vendors/:id',
+
   // Product Routes
   products: '/products',
   addProduct: '/products/add',
   editProduct: '/products/edit/:id',
   productDetails: '/products/:id',
 
+  // Category Routes
+  categories: '/categories',
+
   // Order Routes
   orders: '/orders',
   orderDetails: '/orders/:id',
   orderTracking: '/orders/tracking/:id',
   updateOrderStatus: '/orders/update-status/:id',
+
+  // Sales Routes
+  salesOverview: '/sales',
 
   // Catalog Routes
   catalog: '/catalog',

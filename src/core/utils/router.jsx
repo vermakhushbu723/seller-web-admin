@@ -11,16 +11,27 @@ import ProtectedRoute from '../components/ProtectedRoute.jsx';
 import DashboardPage from '../../features/dashboard/pages/DashboardPage.jsx';
 import AnalyticsPage from '../../features/dashboard/pages/AnalyticsPage.jsx';
 
+// Vendor Pages
+import VendorsPage from '../../features/vendors/pages/VendorsPage.jsx';
+import VendorDetailsPage from '../../features/vendors/pages/VendorDetailsPage.jsx';
+import AddEditVendorPage from '../../features/vendors/pages/AddEditVendorPage.jsx';
+
 // Product Pages
 import ProductsPage from '../../features/products/pages/ProductsPage.jsx';
 import AddProductPage from '../../features/products/pages/AddProductPage.jsx';
 import EditProductPage from '../../features/products/pages/EditProductPage.jsx';
 import ProductDetailsPage from '../../features/products/pages/ProductDetailsPage.jsx';
 
+// Category Pages
+import CategoriesPage from '../../features/categories/pages/CategoriesPage.jsx';
+
 // Order Pages
 import OrdersPage from '../../features/orders/pages/OrdersPage.jsx';
 import OrderDetailsPage from '../../features/orders/pages/OrderDetailsPage.jsx';
 import UpdateOrderStatusPage from '../../features/orders/pages/UpdateOrderStatusPage.jsx';
+
+// Sales Pages
+import SalesOverviewPage from '../../features/sales/pages/SalesOverviewPage.jsx';
 
 // Catalog Pages
 import CatalogPage from '../../features/catalog/pages/CatalogPage.jsx';
@@ -72,16 +83,28 @@ export const router = createBrowserRouter([
       { path: AppRoutes.dashboard, element: <DashboardPage /> },
       { path: AppRoutes.analytics, element: <AnalyticsPage /> },
 
+      // Vendor Routes
+      { path: AppRoutes.vendors, element: <VendorsPage /> },
+      { path: AppRoutes.addVendor, element: <AddEditVendorPage /> },
+      { path: AppRoutes.editVendor, element: <AddEditVendorPage /> },
+      { path: AppRoutes.vendorDetails, element: <VendorDetailsPage /> },
+
       // Product Routes
       { path: AppRoutes.products, element: <ProductsPage /> },
       { path: AppRoutes.addProduct, element: <AddProductPage /> },
       { path: AppRoutes.editProduct, element: <EditProductPage /> },
       { path: AppRoutes.productDetails, element: <ProductDetailsPage /> },
 
+      // Category Routes
+      { path: AppRoutes.categories, element: <CategoriesPage /> },
+
       // Order Routes
       { path: AppRoutes.orders, element: <OrdersPage /> },
       { path: AppRoutes.orderDetails, element: <OrderDetailsPage /> },
       { path: AppRoutes.updateOrderStatus, element: <UpdateOrderStatusPage /> },
+
+      // Sales Routes
+      { path: AppRoutes.salesOverview, element: <SalesOverviewPage /> },
 
       // Catalog Routes
       { path: AppRoutes.catalog, element: <CatalogPage /> },
